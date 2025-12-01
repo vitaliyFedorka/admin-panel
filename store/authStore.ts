@@ -21,6 +21,7 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       login: async (email: string, password: string) => {
         // Simple mock authentication - in production, this would call an API
+        // Accept any email/password for demo purposes, but prefer test@example.com with password123
         if (email && password) {
           const user: User = {
             id: '1',

@@ -77,6 +77,28 @@ Run type checking:
 npm run type-check
 ```
 
+### E2E Testing with Playwright and Cucumber
+
+Run E2E tests with Cucumber:
+```bash
+npm run test:e2e
+```
+
+Run E2E tests with Playwright UI:
+```bash
+npm run test:e2e:ui
+```
+
+Run E2E tests in headed mode (see browser):
+```bash
+npm run test:e2e:headed
+```
+
+Run E2E tests for CI:
+```bash
+npm run test:e2e:ci
+```
+
 ## CI/CD
 
 This project uses GitHub Actions to automatically run tests on every pull request. The workflow:
@@ -84,6 +106,8 @@ This project uses GitHub Actions to automatically run tests on every pull reques
 - ✅ Runs TypeScript type checking
 - ✅ Runs all unit tests with coverage
 - ✅ Builds the project to ensure it compiles
+- ✅ Runs E2E tests with Playwright
+- ✅ Uploads test reports as artifacts
 
 The tests will run automatically when you:
 - Open a pull request to `main` or `develop` branches
