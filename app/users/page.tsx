@@ -3,13 +3,13 @@
 import { useState, useEffect } from 'react'
 import Layout from '@/components/Layout'
 import { usersApi, type User } from '@/lib/api'
+import { useUsersStore } from '@/store/usersStore'
 
 type SortField = 'id' | 'name' | 'username' | 'email' | 'phone'
 type SortDirection = 'asc' | 'desc' | null
 
 export default function UsersPage() {
-  const [users, setUsers] = useState<User[]>([])
-  const [loading, setLoading] = useState(true)
+  const { users, isLoading, loadUsers, addUser, updateUser, deleteUser } = useUsersStore()
   const [showModal, setShowModal] = useState(false)
   const [editingUser, setEditingUser] = useState<User | null>(null)
   const [sortField, setSortField] = useState<SortField | null>(null)
@@ -24,19 +24,8 @@ export default function UsersPage() {
 
   useEffect(() => {
     loadUsers()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const loadUsers = async () => {
-    try {
-      setLoading(true)
-      const data = await usersApi.getAll()
-      setUsers(data)
-    } catch (error) {
-      console.error('Failed to load users:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const handleCreate = () => {
     setEditingUser(null)
@@ -60,7 +49,7 @@ export default function UsersPage() {
     if (confirm('Are you sure you want to delete this user?')) {
       try {
         await usersApi.delete(id)
-        setUsers(users.filter((u) => u.id !== id))
+        deleteUser(id)
       } catch (error) {
         console.error('Failed to delete user:', error)
         alert('Failed to delete user')
@@ -73,12 +62,10 @@ export default function UsersPage() {
     try {
       if (editingUser) {
         await usersApi.update(editingUser.id, formData)
-        setUsers(
-          users.map((u) => (u.id === editingUser.id ? { ...u, ...formData } : u))
-        )
+        updateUser(editingUser.id, formData)
       } else {
         const newUser = await usersApi.create(formData)
-        setUsers([...users, newUser])
+        addUser(newUser)
       }
       setShowModal(false)
     } catch (error) {
@@ -142,7 +129,7 @@ export default function UsersPage() {
     return <span className="text-gray-400">↕️</span>
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <Layout>
         <div className="flex items-center justify-center h-64">

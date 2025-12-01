@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Layout from '@/components/Layout'
-import { usersApi, postsApi, todosApi } from '@/lib/api'
+import { postsApi, todosApi } from '@/lib/api'
+import { useUsersStore } from '@/store/usersStore'
 import {
   BarChart,
   Bar,
@@ -22,7 +23,7 @@ import {
 const COLORS = ['#3b82f6', '#10b981', '#8b5cf6', '#f59e0b', '#ef4444', '#06b6d4', '#ec4899', '#84cc16', '#f97316', '#6366f1']
 
 export default function DashboardPage() {
-  const [users, setUsers] = useState<any[]>([])
+  const { users, loadUsers } = useUsersStore()
   const [posts, setPosts] = useState<any[]>([])
   const [todos, setTodos] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -31,15 +32,18 @@ export default function DashboardPage() {
     loadData()
   }, [])
 
+  useEffect(() => {
+    loadUsers()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const loadData = async () => {
     try {
       setLoading(true)
-      const [usersData, postsData, todosData] = await Promise.all([
-        usersApi.getAll(),
+      const [postsData, todosData] = await Promise.all([
         postsApi.getAll(),
         todosApi.getAll(),
       ])
-      setUsers(usersData)
       setPosts(postsData)
       setTodos(todosData)
     } catch (error) {

@@ -20,6 +20,9 @@ A modern admin panel built with Next.js, TypeScript, Zustand, and Tailwind CSS.
 - **Zustand** - State management
 - **Tailwind CSS** - Styling
 - **Axios** - HTTP client
+- **Framer Motion** - Animations
+- **Recharts** - Data visualization
+- **Jest** - Unit testing
 - **JSONPlaceholder API** - Open source REST API for testing
 
 ## Getting Started
@@ -47,6 +50,23 @@ npm run dev
 
 Use any email and password to login (demo mode). The authentication is stored in localStorage.
 
+## Testing
+
+Run unit tests:
+```bash
+npm test
+```
+
+Run tests in watch mode:
+```bash
+npm run test:watch
+```
+
+Run tests with coverage:
+```bash
+npm run test:coverage
+```
+
 ## Project Structure
 
 ```
@@ -65,6 +85,7 @@ admin-panel/
 │   └── authStore.ts       # Authentication store
 ├── lib/                   # Utilities
 │   └── api.ts             # API client functions
+├── __tests__/             # Unit tests
 └── package.json
 ```
 
