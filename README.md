@@ -67,6 +67,28 @@ Run tests with coverage:
 npm run test:coverage
 ```
 
+Run tests for CI (no watch mode):
+```bash
+npm run test:ci
+```
+
+Run type checking:
+```bash
+npm run type-check
+```
+
+## CI/CD
+
+This project uses GitHub Actions to automatically run tests on every pull request. The workflow:
+
+- ✅ Runs TypeScript type checking
+- ✅ Runs all unit tests with coverage
+- ✅ Builds the project to ensure it compiles
+
+The tests will run automatically when you:
+- Open a pull request to `main` or `develop` branches
+- Push commits to `main` or `develop` branches
+
 ## Project Structure
 
 ```
