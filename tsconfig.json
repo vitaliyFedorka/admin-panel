@@ -33,16 +33,14 @@
     "store/**/*.ts",
     ".next/types/**/*.ts",
     "jest.setup.js",
-    "types/**/*.d.ts"
+    "jest.setup.d.ts",
+    "types/**/*.d.ts",
+    "__tests__/**/*.ts",
+    "__tests__/**/*.tsx"
   ],
   "exclude": [
     "node_modules",
     "tests",
-    "__tests__",
-    "**/*.test.ts",
-    "**/*.test.tsx",
-    "**/*.spec.ts",
-    "**/*.spec.tsx",
     "**/*.steps.ts"
   ],
   "types": ["jest", "@testing-library/jest-dom"]
