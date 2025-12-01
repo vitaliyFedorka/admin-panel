@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { ThemeScript } from './theme-script'
 
 export const metadata: Metadata = {
   title: 'Admin Panel',
@@ -12,7 +13,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+          <title>Admin Panel</title>
+        <ThemeScript />
+      </head>
       <body>{children}</body>
     </html>
   )
