@@ -29,7 +29,7 @@ export default function PostsPage() {
     return (
       <Layout>
         <div className="flex items-center justify-center h-64">
-          <div className="text-lg text-gray-600">Loading posts...</div>
+          <div className="text-lg text-gray-600 dark:text-gray-400">Loading posts...</div>
         </div>
       </Layout>
     )
@@ -38,20 +38,20 @@ export default function PostsPage() {
   return (
     <Layout>
       <div>
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Posts</h1>
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-6">Posts</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post) => (
             <div
               key={post.id}
-              className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow cursor-pointer"
+              className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 hover:shadow-lg transition-all cursor-pointer"
               onClick={() => setSelectedPost(post)}
             >
-              <h2 className="text-xl font-semibold text-gray-800 mb-2 line-clamp-2">
+              <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-2 line-clamp-2">
                 {post.title}
               </h2>
-              <p className="text-gray-600 text-sm line-clamp-3">{post.body}</p>
-              <div className="mt-4 pt-4 border-t border-gray-200">
-                <span className="text-xs text-gray-500">User ID: {post.userId}</span>
+              <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-3">{post.body}</p>
+              <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <span className="text-xs text-gray-500 dark:text-gray-400">User ID: {post.userId}</span>
               </div>
             </div>
           ))}
@@ -59,26 +59,26 @@ export default function PostsPage() {
 
         {selectedPost && (
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center z-50 p-4"
             onClick={() => setSelectedPost(null)}
           >
             <div
-              className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+              className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto transition-colors"
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={() => setSelectedPost(null)}
-                className="float-right text-gray-500 hover:text-gray-700 text-2xl"
+                className="float-right text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-2xl transition-colors"
               >
                 ×
               </button>
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
                 {selectedPost.title}
               </h2>
-              <p className="text-gray-600 mb-4 whitespace-pre-wrap">
+              <p className="text-gray-600 dark:text-gray-400 mb-4 whitespace-pre-wrap">
                 {selectedPost.body}
               </p>
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-gray-500 dark:text-gray-400">
                 <p>Post ID: {selectedPost.id}</p>
                 <p>User ID: {selectedPost.userId}</p>
               </div>

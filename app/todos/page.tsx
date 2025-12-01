@@ -84,22 +84,22 @@ export default function TodosPage() {
 
   const getSortIcon = (field: SortField) => {
     if (sortField !== field) {
-      return <span className="text-gray-400">↕️</span>
+      return <span className="text-gray-400 dark:text-gray-500">↕️</span>
     }
     if (sortDirection === 'asc') {
-      return <span className="text-blue-600">↑</span>
+      return <span className="text-blue-600 dark:text-blue-400">↑</span>
     }
     if (sortDirection === 'desc') {
-      return <span className="text-blue-600">↓</span>
+      return <span className="text-blue-600 dark:text-blue-400">↓</span>
     }
-    return <span className="text-gray-400">↕️</span>
+    return <span className="text-gray-400 dark:text-gray-500">↕️</span>
   }
 
   if (loading) {
     return (
       <Layout>
         <div className="flex items-center justify-center h-64">
-          <div className="text-lg text-gray-600">Loading todos...</div>
+          <div className="text-lg text-gray-600 dark:text-gray-400">Loading todos...</div>
         </div>
       </Layout>
     )
@@ -109,14 +109,14 @@ export default function TodosPage() {
     <Layout>
       <div>
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">Todos</h1>
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Todos</h1>
           <div className="flex gap-2">
             <button
               onClick={() => setFilter('all')}
               className={`px-4 py-2 rounded-lg transition-colors ${
                 filter === 'all'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  ? 'bg-blue-600 dark:bg-blue-700 text-white'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
               }`}
             >
               All
@@ -125,8 +125,8 @@ export default function TodosPage() {
               onClick={() => setFilter('completed')}
               className={`px-4 py-2 rounded-lg transition-colors ${
                 filter === 'completed'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  ? 'bg-blue-600 dark:bg-blue-700 text-white'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
               }`}
             >
               Completed
@@ -135,8 +135,8 @@ export default function TodosPage() {
               onClick={() => setFilter('pending')}
               className={`px-4 py-2 rounded-lg transition-colors ${
                 filter === 'pending'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  ? 'bg-blue-600 dark:bg-blue-700 text-white'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
               }`}
             >
               Pending
@@ -144,12 +144,12 @@ export default function TodosPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden transition-colors">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
                 <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 select-none"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 select-none transition-colors"
                   onClick={() => handleSort('id')}
                 >
                   <div className="flex items-center gap-2">
@@ -158,7 +158,7 @@ export default function TodosPage() {
                   </div>
                 </th>
                 <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 select-none"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 select-none transition-colors"
                   onClick={() => handleSort('title')}
                 >
                   <div className="flex items-center gap-2">
@@ -167,7 +167,7 @@ export default function TodosPage() {
                   </div>
                 </th>
                 <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 select-none"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 select-none transition-colors"
                   onClick={() => handleSort('userId')}
                 >
                   <div className="flex items-center gap-2">
@@ -176,7 +176,7 @@ export default function TodosPage() {
                   </div>
                 </th>
                 <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 select-none"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 select-none transition-colors"
                   onClick={() => handleSort('completed')}
                 >
                   <div className="flex items-center gap-2">
@@ -186,22 +186,22 @@ export default function TodosPage() {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {sortedTodos.map((todo) => (
-                <tr key={todo.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <tr key={todo.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                     {todo.id}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-900">{todo.title}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 text-sm text-gray-900 dark:text-white">{todo.title}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                     {todo.userId}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                         todo.completed
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-yellow-100 text-yellow-800'
+                          ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400'
+                          : 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400'
                       }`}
                     >
                       {todo.completed ? 'Completed' : 'Pending'}
@@ -213,7 +213,7 @@ export default function TodosPage() {
           </table>
         </div>
 
-        <div className="mt-4 text-sm text-gray-600">
+        <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
           Showing {sortedTodos.length} of {todos.length} todos
         </div>
       </div>

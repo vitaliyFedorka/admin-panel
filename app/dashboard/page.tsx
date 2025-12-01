@@ -81,9 +81,9 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <Layout>
-        <div className="flex items-center justify-center h-64">
-          <div data-testid="loading-dashboard" className="text-lg text-gray-600">Loading dashboard...</div>
-        </div>
+            <div className="flex items-center justify-center h-64">
+              <div data-testid="loading-dashboard" className="text-lg text-gray-600 dark:text-gray-400">Loading dashboard...</div>
+            </div>
       </Layout>
     )
   }
@@ -91,32 +91,32 @@ export default function DashboardPage() {
   return (
     <Layout>
       <div>
-        <h1 data-testid="dashboard-title" className="text-3xl font-bold text-gray-800 mb-6">Dashboard</h1>
-        
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div data-testid="users-stat-card" className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold text-gray-700 mb-2">Users</h2>
-            <p data-testid="users-count" className="text-3xl font-bold text-blue-600">{users.length}</p>
-            <p className="text-sm text-gray-500 mt-1">Total users</p>
-          </div>
-          <div data-testid="posts-stat-card" className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold text-gray-700 mb-2">Posts</h2>
-            <p className="text-3xl font-bold text-green-600">{posts.length}</p>
-            <p className="text-sm text-gray-500 mt-1">Total posts</p>
-          </div>
-          <div data-testid="todos-stat-card" className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold text-gray-700 mb-2">Todos</h2>
-            <p className="text-3xl font-bold text-purple-600">{todos.length}</p>
-            <p className="text-sm text-gray-500 mt-1">Total todos</p>
-          </div>
-        </div>
+            <h1 data-testid="dashboard-title" className="text-3xl font-bold text-gray-800 dark:text-white mb-6">Dashboard</h1>
+
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div data-testid="users-stat-card" className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-colors">
+                <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Users</h2>
+                <p data-testid="users-count" className="text-3xl font-bold text-blue-600 dark:text-blue-400">{users.length}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Total users</p>
+              </div>
+              <div data-testid="posts-stat-card" className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-colors">
+                <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Posts</h2>
+                <p className="text-3xl font-bold text-green-600 dark:text-green-400">{posts.length}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Total posts</p>
+              </div>
+              <div data-testid="todos-stat-card" className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-colors">
+                <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Todos</h2>
+                <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">{todos.length}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Total todos</p>
+              </div>
+            </div>
 
         {/* Charts Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          {/* Posts per User Bar Chart */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 data-testid="posts-per-user-chart" className="text-xl font-semibold text-gray-800 mb-4">Posts per User</h2>
+              {/* Posts per User Bar Chart */}
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-colors">
+                <h2 data-testid="posts-per-user-chart" className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Posts per User</h2>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={postsPerUser}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -132,9 +132,9 @@ export default function DashboardPage() {
             </ResponsiveContainer>
           </div>
 
-          {/* Todos Completion Pie Chart */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 data-testid="todos-completion-chart" className="text-xl font-semibold text-gray-800 mb-4">Todos Completion Status</h2>
+              {/* Todos Completion Pie Chart */}
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-colors">
+                <h2 data-testid="todos-completion-chart" className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Todos Completion Status</h2>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -160,9 +160,9 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Todos per User Stacked Bar Chart */}
-        <div className="bg-white p-6 rounded-lg shadow mb-6">
-          <h2 data-testid="todos-status-by-user-chart" className="text-xl font-semibold text-gray-800 mb-4">Todos Status by User (Top 5)</h2>
+            {/* Todos per User Stacked Bar Chart */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow mb-6 transition-colors">
+              <h2 data-testid="todos-status-by-user-chart" className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Todos Status by User (Top 5)</h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={todosPerUser}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -176,9 +176,9 @@ export default function DashboardPage() {
           </ResponsiveContainer>
         </div>
 
-        {/* Posts Distribution Line Chart */}
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 data-testid="posts-distribution-chart" className="text-xl font-semibold text-gray-800 mb-4">Posts Distribution by User</h2>
+            {/* Posts Distribution Line Chart */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-colors">
+              <h2 data-testid="posts-distribution-chart" className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Posts Distribution by User</h2>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={postsPerUser}>
               <CartesianGrid strokeDasharray="3 3" />

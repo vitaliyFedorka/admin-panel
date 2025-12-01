@@ -5,10 +5,11 @@ A modern admin panel built with Next.js, TypeScript, Zustand, and Tailwind CSS.
 ## Features
 
 - 🔐 Authentication system with login page
-- 📊 Dashboard with statistics
+- 📊 Dashboard with statistics and charts
 - 👥 Users management with full CRUD operations
 - 📝 Posts viewing and management
 - ✅ Todos management with filtering
+- 🌓 **Dark mode support** (Light, Dark, System preference)
 - 🎨 Modern UI with Tailwind CSS
 - 📱 Responsive design
 - 🚀 Ready for Vercel deployment
