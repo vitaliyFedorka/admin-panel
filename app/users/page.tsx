@@ -61,11 +61,31 @@ export default function UsersPage() {
     e.preventDefault()
     try {
       if (editingUser) {
-        await usersApi.update(editingUser.id, formData)
-        updateUser(editingUser.id, formData)
+        // Try API call, but update store regardless (since we use localStorage)
+        try {
+          await usersApi.update(editingUser.id, formData)
+        } catch (apiError) {
+          console.warn('API update failed, but updating local store:', apiError)
+        }
+        // Update store with form data - generate a temporary ID if needed
+        updateUser(editingUser.id, {
+          ...formData,
+          id: editingUser.id, // Preserve the ID
+        })
       } else {
-        const newUser = await usersApi.create(formData)
-        addUser(newUser)
+        // For new users, try API but create locally if it fails
+        try {
+          const newUser = await usersApi.create(formData)
+          addUser(newUser)
+        } catch (apiError) {
+          console.warn('API create failed, but creating locally:', apiError)
+          // Create user locally with a temporary ID
+          const maxId = users.length > 0 ? Math.max(...users.map(u => u.id)) : 0
+          addUser({
+            ...formData,
+            id: maxId + 1,
+          } as User)
+        }
       }
       setShowModal(false)
     } catch (error) {
@@ -133,7 +153,7 @@ export default function UsersPage() {
     return (
       <Layout>
         <div className="flex items-center justify-center h-64">
-          <div className="text-lg text-gray-600">Loading users...</div>
+          <div data-testid="loading-users" className="text-lg text-gray-600">Loading users...</div>
         </div>
       </Layout>
     )
@@ -145,6 +165,7 @@ export default function UsersPage() {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-gray-800">Users</h1>
           <button
+            data-testid="add-user-button"
             onClick={handleCreate}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
@@ -153,7 +174,7 @@ export default function UsersPage() {
         </div>
 
         <div className="bg-white rounded-lg shadow overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
+          <table data-testid="users-table" className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
                 <th 
@@ -166,6 +187,7 @@ export default function UsersPage() {
                   </div>
                 </th>
                 <th 
+                  data-testid="name-column-header"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 select-none"
                   onClick={() => handleSort('name')}
                 >
@@ -226,12 +248,14 @@ export default function UsersPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
+                      data-testid={`edit-user-${user.id}`}
                       onClick={() => handleEdit(user)}
                       className="text-blue-600 hover:text-blue-900 mr-4"
                     >
                       Edit
                     </button>
                     <button
+                      data-testid={`delete-user-${user.id}`}
                       onClick={() => handleDelete(user.id)}
                       className="text-red-600 hover:text-red-900"
                     >
@@ -245,18 +269,19 @@ export default function UsersPage() {
         </div>
 
         {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div data-testid="user-modal" className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-md">
               <h2 className="text-2xl font-bold mb-4 text-gray-900">
                 {editingUser ? 'Edit User' : 'Create User'}
               </h2>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form data-testid="user-form" onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Name
                   </label>
                   <input
                     type="text"
+                    data-testid="user-name-input"
                     value={formData.name}
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
@@ -271,6 +296,7 @@ export default function UsersPage() {
                   </label>
                   <input
                     type="text"
+                    data-testid="user-username-input"
                     value={formData.username}
                     onChange={(e) =>
                       setFormData({ ...formData, username: e.target.value })
@@ -285,6 +311,7 @@ export default function UsersPage() {
                   </label>
                   <input
                     type="email"
+                    data-testid="user-email-input"
                     value={formData.email}
                     onChange={(e) =>
                       setFormData({ ...formData, email: e.target.value })
@@ -299,6 +326,7 @@ export default function UsersPage() {
                   </label>
                   <input
                     type="tel"
+                    data-testid="user-phone-input"
                     value={formData.phone}
                     onChange={(e) =>
                       setFormData({ ...formData, phone: e.target.value })
@@ -312,6 +340,7 @@ export default function UsersPage() {
                   </label>
                   <input
                     type="text"
+                    data-testid="user-website-input"
                     value={formData.website}
                     onChange={(e) =>
                       setFormData({ ...formData, website: e.target.value })
@@ -322,6 +351,7 @@ export default function UsersPage() {
                 <div className="flex gap-3 pt-4">
                   <button
                     type="submit"
+                    data-testid="user-form-submit"
                     className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
                   >
                     {editingUser ? 'Update' : 'Create'}

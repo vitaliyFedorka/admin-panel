@@ -9,6 +9,8 @@ const nextConfig = {
   typescript: {
     // Ensure TypeScript errors are still caught
     ignoreBuildErrors: false,
+    // Exclude test files from type checking
+    tsconfigPath: './tsconfig.json',
   },
 }
 

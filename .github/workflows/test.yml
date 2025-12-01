@@ -32,3 +32,27 @@ jobs:
       - name: Run build
         run: npm run build
 
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+        env:
+          CI: true
+
+      - name: Install system dependencies
+        run: npx playwright install-deps chromium
+        env:
+          CI: true
+
+      - name: Run E2E tests
+        run: npm run test:e2e:ci
+        env:
+          BASE_URL: http://localhost:3000
+          CI: true
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+

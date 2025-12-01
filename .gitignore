@@ -43,10 +43,11 @@ coverage/
 # IDE
 .idea/
 
-# Helper scripts
-COMMIT_GUIDE.md
-commit-stages.sh
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+tests/e2e/reports/
 
-# Helper scripts
-COMMIT_GUIDE.md
-commit-stages.sh
+# Playwright BDD generated files
+/.features-gen/
