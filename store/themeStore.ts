@@ -20,9 +20,12 @@ export const useThemeStore = create<ThemeState>()(
       getEffectiveTheme: () => {
         const { theme } = get()
         if (theme === 'system') {
-          return window.matchMedia('(prefers-color-scheme: dark)').matches
-            ? 'dark'
-            : 'light'
+          if (typeof window !== 'undefined' && window.matchMedia) {
+            return window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light'
+          }
+          return 'light' // Default to light if matchMedia is not available
         }
         return theme
       },
@@ -41,21 +44,29 @@ export const useThemeStore = create<ThemeState>()(
 )
 
 function applyTheme(theme: Theme) {
+  if (typeof window === 'undefined' || !window.document) {
+    return
+  }
+  
   const root = window.document.documentElement
   root.classList.remove('light', 'dark')
 
   if (theme === 'system') {
-    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light'
-    root.classList.add(systemTheme)
+    if (window.matchMedia) {
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light'
+      root.classList.add(systemTheme)
+    } else {
+      root.classList.add('light') // Default to light if matchMedia is not available
+    }
   } else {
     root.classList.add(theme)
   }
 }
 
 // Initialize theme on load (client-side only)
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && window.matchMedia) {
   // Listen for system theme changes
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
     const store = useThemeStore.getState()
