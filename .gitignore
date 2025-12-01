@@ -34,3 +34,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# coverage
+coverage/
+.nyc_output/
+*.lcov
+
+# IDE
+.idea/
+
+# Helper scripts
+COMMIT_GUIDE.md
+commit-stages.sh
+
+# Helper scripts
+COMMIT_GUIDE.md
+commit-stages.sh
