@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     # This job must succeed for the workflow to pass
     # If any step fails, the entire workflow fails and prevents deployment
+    # The job name "test" will appear as a check in GitHub and can be required by Vercel
 
     steps:
       - name: Checkout code
