@@ -17,6 +17,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
     "axios": "^1.7.2",
     "framer-motion": "^11.0.5",
     "next": "^16.0.10",
