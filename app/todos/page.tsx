@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import Layout from '@/components/Layout'
+import Card from '@/components/Card'
 import { todosApi, type Todo } from '@/lib/api'
+import { CaretUp, CaretDown, CaretUpDown, CheckCircle, Circle } from '@phosphor-icons/react'
 
 type SortField = 'id' | 'title' | 'userId' | 'completed'
 type SortDirection = 'asc' | 'desc' | null
@@ -84,72 +86,61 @@ export default function TodosPage() {
 
   const getSortIcon = (field: SortField) => {
     if (sortField !== field) {
-      return <span className="text-gray-400 dark:text-gray-500">↕️</span>
+      return <CaretUpDown size={12} className="text-muted-foreground/60" />
     }
     if (sortDirection === 'asc') {
-      return <span className="text-blue-600 dark:text-blue-400">↑</span>
+      return <CaretUp size={12} weight="bold" className="text-accent" />
     }
     if (sortDirection === 'desc') {
-      return <span className="text-blue-600 dark:text-blue-400">↓</span>
+      return <CaretDown size={12} weight="bold" className="text-accent" />
     }
-    return <span className="text-gray-400 dark:text-gray-500">↕️</span>
+    return <CaretUpDown size={12} className="text-muted-foreground/60" />
   }
 
   if (loading) {
     return (
       <Layout>
         <div className="flex items-center justify-center h-64">
-          <div className="text-lg text-gray-600 dark:text-gray-400">Loading todos...</div>
+          <div className="text-lg text-muted-foreground">Loading todos...</div>
         </div>
       </Layout>
     )
   }
 
+  const filters: Array<{ value: typeof filter; label: string }> = [
+    { value: 'all', label: 'All' },
+    { value: 'completed', label: 'Completed' },
+    { value: 'pending', label: 'Pending' },
+  ]
+
   return (
     <Layout>
       <div>
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Todos</h1>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded-lg transition-colors ${
-                filter === 'all'
-                  ? 'bg-blue-600 dark:bg-blue-700 text-white'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-              }`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setFilter('completed')}
-              className={`px-4 py-2 rounded-lg transition-colors ${
-                filter === 'completed'
-                  ? 'bg-blue-600 dark:bg-blue-700 text-white'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-              }`}
-            >
-              Completed
-            </button>
-            <button
-              onClick={() => setFilter('pending')}
-              className={`px-4 py-2 rounded-lg transition-colors ${
-                filter === 'pending'
-                  ? 'bg-blue-600 dark:bg-blue-700 text-white'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-              }`}
-            >
-              Pending
-            </button>
+          <h1 className="text-2xl font-semibold text-foreground">Todos</h1>
+          <div className="flex gap-1 bg-muted rounded-lg p-1">
+            {filters.map((f) => (
+              <button
+                key={f.value}
+                onClick={() => setFilter(f.value)}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors cursor-pointer ${
+                  filter === f.value
+                    ? 'bg-accent text-accent-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden transition-colors">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-50 dark:bg-gray-700">
+        <Card className="overflow-hidden">
+          <table className="min-w-full divide-y divide-border">
+            <thead className="bg-muted/50">
               <tr>
-                <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 select-none transition-colors"
+                <th
+                  className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer hover:bg-muted select-none transition-colors"
                   onClick={() => handleSort('id')}
                 >
                   <div className="flex items-center gap-2">
@@ -157,8 +148,8 @@ export default function TodosPage() {
                     {getSortIcon('id')}
                   </div>
                 </th>
-                <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 select-none transition-colors"
+                <th
+                  className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer hover:bg-muted select-none transition-colors"
                   onClick={() => handleSort('title')}
                 >
                   <div className="flex items-center gap-2">
@@ -166,8 +157,8 @@ export default function TodosPage() {
                     {getSortIcon('title')}
                   </div>
                 </th>
-                <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 select-none transition-colors"
+                <th
+                  className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer hover:bg-muted select-none transition-colors"
                   onClick={() => handleSort('userId')}
                 >
                   <div className="flex items-center gap-2">
@@ -175,8 +166,8 @@ export default function TodosPage() {
                     {getSortIcon('userId')}
                   </div>
                 </th>
-                <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 select-none transition-colors"
+                <th
+                  className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer hover:bg-muted select-none transition-colors"
                   onClick={() => handleSort('completed')}
                 >
                   <div className="flex items-center gap-2">
@@ -186,24 +177,25 @@ export default function TodosPage() {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody className="divide-y divide-border">
               {sortedTodos.map((todo) => (
-                <tr key={todo.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                <tr key={todo.id} className="hover:bg-muted/40 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground tabular">
                     {todo.id}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-900 dark:text-white">{todo.title}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  <td className="px-6 py-4 text-sm text-foreground">{todo.title}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground tabular">
                     {todo.userId}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full ${
                         todo.completed
-                          ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400'
-                          : 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400'
+                          ? 'bg-accent/10 text-accent'
+                          : 'bg-warning/10 text-warning'
                       }`}
                     >
+                      {todo.completed ? <CheckCircle size={13} weight="fill" /> : <Circle size={13} weight="fill" />}
                       {todo.completed ? 'Completed' : 'Pending'}
                     </span>
                   </td>
@@ -211,9 +203,9 @@ export default function TodosPage() {
               ))}
             </tbody>
           </table>
-        </div>
+        </Card>
 
-        <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+        <div className="mt-4 text-sm text-muted-foreground">
           Showing {sortedTodos.length} of {todos.length} todos
         </div>
       </div>

@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import Layout from '@/components/Layout'
+import Card from '@/components/Card'
 import { usersApi, type User } from '@/lib/api'
 import { useUsersStore } from '@/store/usersStore'
+import { Plus, PencilSimple, Trash, CaretUp, CaretDown, CaretUpDown, X } from '@phosphor-icons/react'
 
 type SortField = 'id' | 'name' | 'username' | 'email' | 'phone'
 type SortDirection = 'asc' | 'desc' | null
@@ -138,22 +140,22 @@ export default function UsersPage() {
 
   const getSortIcon = (field: SortField) => {
     if (sortField !== field) {
-      return <span className="text-gray-400 dark:text-gray-500">↕️</span>
+      return <CaretUpDown size={12} className="text-muted-foreground/60" />
     }
     if (sortDirection === 'asc') {
-      return <span className="text-blue-600 dark:text-blue-400">↑</span>
+      return <CaretUp size={12} weight="bold" className="text-accent" />
     }
     if (sortDirection === 'desc') {
-      return <span className="text-blue-600 dark:text-blue-400">↓</span>
+      return <CaretDown size={12} weight="bold" className="text-accent" />
     }
-    return <span className="text-gray-400 dark:text-gray-500">↕️</span>
+    return <CaretUpDown size={12} className="text-muted-foreground/60" />
   }
 
   if (isLoading) {
     return (
       <Layout>
         <div className="flex items-center justify-center h-64">
-          <div data-testid="loading-users" className="text-lg text-gray-600 dark:text-gray-400">Loading users...</div>
+          <div data-testid="loading-users" className="text-lg text-muted-foreground">Loading users...</div>
         </div>
       </Layout>
     )
@@ -163,41 +165,42 @@ export default function UsersPage() {
     <Layout>
       <div>
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Users</h1>
+          <h1 className="text-2xl font-semibold text-foreground">Users</h1>
           <button
             data-testid="add-user-button"
             onClick={handleCreate}
-            className="bg-blue-600 dark:bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+            className="flex items-center gap-2 bg-accent text-accent-foreground px-4 py-2 rounded-lg hover:brightness-110 active:brightness-95 transition-all text-sm font-medium shadow-glow cursor-pointer"
           >
-            + Add User
+            <Plus size={16} weight="bold" />
+            Add User
           </button>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden transition-colors">
-          <table data-testid="users-table" className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-50 dark:bg-gray-700">
-                  <tr>
-                    <th
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 select-none transition-colors"
-                      onClick={() => handleSort('id')}
-                    >
-                      <div className="flex items-center gap-2">
-                        ID
-                        {getSortIcon('id')}
-                      </div>
-                    </th>
-                    <th
-                      data-testid="name-column-header"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 select-none transition-colors"
-                      onClick={() => handleSort('name')}
-                    >
-                      <div className="flex items-center gap-2">
-                        Name
-                        {getSortIcon('name')}
-                      </div>
-                    </th>
-                <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 select-none transition-colors"
+        <Card className="overflow-hidden">
+          <table data-testid="users-table" className="min-w-full divide-y divide-border">
+            <thead className="bg-muted/50">
+              <tr>
+                <th
+                  className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer hover:bg-muted select-none transition-colors"
+                  onClick={() => handleSort('id')}
+                >
+                  <div className="flex items-center gap-2">
+                    ID
+                    {getSortIcon('id')}
+                  </div>
+                </th>
+                <th
+                  data-testid="name-column-header"
+                  className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer hover:bg-muted select-none transition-colors"
+                  onClick={() => handleSort('name')}
+                >
+                  <div className="flex items-center gap-2">
+                    Name
+                    {getSortIcon('name')}
+                  </div>
+                </th>
+                <th
+                  className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer hover:bg-muted select-none transition-colors"
                   onClick={() => handleSort('username')}
                 >
                   <div className="flex items-center gap-2">
@@ -205,8 +208,8 @@ export default function UsersPage() {
                     {getSortIcon('username')}
                   </div>
                 </th>
-                <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 select-none transition-colors"
+                <th
+                  className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer hover:bg-muted select-none transition-colors"
                   onClick={() => handleSort('email')}
                 >
                   <div className="flex items-center gap-2">
@@ -214,8 +217,8 @@ export default function UsersPage() {
                     {getSortIcon('email')}
                   </div>
                 </th>
-                <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 select-none transition-colors"
+                <th
+                  className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer hover:bg-muted select-none transition-colors"
                   onClick={() => handleSort('phone')}
                 >
                   <div className="flex items-center gap-2">
@@ -223,151 +226,165 @@ export default function UsersPage() {
                     {getSortIcon('phone')}
                   </div>
                 </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Actions
-                    </th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
-                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                  {sortedUsers.map((user) => (
-                    <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                        {user.id}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                        {user.name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                        {user.username}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                        {user.email}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                        {user.phone || '-'}
-                      </td>
+            <tbody className="divide-y divide-border">
+              {sortedUsers.map((user) => (
+                <tr key={user.id} className="hover:bg-muted/40 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground tabular">
+                    {user.id}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
+                    {user.name}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+                    {user.username}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+                    {user.email}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+                    {user.phone || '-'}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button
-                      data-testid={`edit-user-${user.id}`}
-                      onClick={() => handleEdit(user)}
-                      className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 mr-4 transition-colors"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      data-testid={`delete-user-${user.id}`}
-                      onClick={() => handleDelete(user.id)}
-                      className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300 transition-colors"
-                    >
-                      Delete
-                    </button>
+                    <div className="flex items-center justify-end gap-3">
+                      <button
+                        data-testid={`edit-user-${user.id}`}
+                        onClick={() => handleEdit(user)}
+                        aria-label={`Edit ${user.name}`}
+                        className="text-muted-foreground hover:text-accent transition-colors cursor-pointer"
+                      >
+                        <PencilSimple size={16} />
+                      </button>
+                      <button
+                        data-testid={`delete-user-${user.id}`}
+                        onClick={() => handleDelete(user.id)}
+                        aria-label={`Delete ${user.name}`}
+                        className="text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
+                      >
+                        <Trash size={16} />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
+        </Card>
 
             {showModal && (
-              <div data-testid="user-modal" className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center z-50">
-                <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md transition-colors">
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
-                    {editingUser ? 'Edit User' : 'Create User'}
-                  </h2>
-              <form data-testid="user-form" onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    data-testid="user-name-input"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white dark:bg-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                    required
-                  />
-                </div>
-                <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Username
-                  </label>
-                  <input
-                    type="text"
-                    data-testid="user-username-input"
-                    value={formData.username}
-                    onChange={(e) =>
-                      setFormData({ ...formData, username: e.target.value })
-                    }
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white dark:bg-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                    required
-                  />
-                </div>
-                <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    data-testid="user-email-input"
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white dark:bg-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                    required
-                  />
-                </div>
-                <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Phone
-                  </label>
-                  <input
-                    type="tel"
-                    data-testid="user-phone-input"
-                    value={formData.phone}
-                    onChange={(e) =>
-                      setFormData({ ...formData, phone: e.target.value })
-                    }
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white dark:bg-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                  />
-                </div>
-                <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Website
-                  </label>
-                  <input
-                    type="text"
-                    data-testid="user-website-input"
-                    value={formData.website}
-                    onChange={(e) =>
-                      setFormData({ ...formData, website: e.target.value })
-                    }
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white dark:bg-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                  />
-                </div>
-                <div className="flex gap-3 pt-4">
-                  <button
-                    type="submit"
-                    data-testid="user-form-submit"
-                    className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    {editingUser ? 'Update' : 'Create'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                    className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
+              <div data-testid="user-modal" className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                <Card className="p-6 w-full max-w-md">
+                  <div className="flex items-center justify-between mb-5">
+                    <h2 className="text-xl font-semibold text-foreground">
+                      {editingUser ? 'Edit User' : 'Create User'}
+                    </h2>
+                    <button
+                      type="button"
+                      onClick={() => setShowModal(false)}
+                      aria-label="Close"
+                      className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                    >
+                      <X size={18} />
+                    </button>
+                  </div>
+                  <form data-testid="user-form" onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-muted-foreground mb-1.5">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        data-testid="user-name-input"
+                        value={formData.name}
+                        onChange={(e) =>
+                          setFormData({ ...formData, name: e.target.value })
+                        }
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-muted/40 focus:ring-2 focus:ring-accent focus:border-transparent text-foreground placeholder:text-muted-foreground/70 transition-shadow"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-muted-foreground mb-1.5">
+                        Username
+                      </label>
+                      <input
+                        type="text"
+                        data-testid="user-username-input"
+                        value={formData.username}
+                        onChange={(e) =>
+                          setFormData({ ...formData, username: e.target.value })
+                        }
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-muted/40 focus:ring-2 focus:ring-accent focus:border-transparent text-foreground placeholder:text-muted-foreground/70 transition-shadow"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-muted-foreground mb-1.5">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        data-testid="user-email-input"
+                        value={formData.email}
+                        onChange={(e) =>
+                          setFormData({ ...formData, email: e.target.value })
+                        }
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-muted/40 focus:ring-2 focus:ring-accent focus:border-transparent text-foreground placeholder:text-muted-foreground/70 transition-shadow"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-muted-foreground mb-1.5">
+                        Phone
+                      </label>
+                      <input
+                        type="tel"
+                        data-testid="user-phone-input"
+                        value={formData.phone}
+                        onChange={(e) =>
+                          setFormData({ ...formData, phone: e.target.value })
+                        }
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-muted/40 focus:ring-2 focus:ring-accent focus:border-transparent text-foreground placeholder:text-muted-foreground/70 transition-shadow"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-muted-foreground mb-1.5">
+                        Website
+                      </label>
+                      <input
+                        type="text"
+                        data-testid="user-website-input"
+                        value={formData.website}
+                        onChange={(e) =>
+                          setFormData({ ...formData, website: e.target.value })
+                        }
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-muted/40 focus:ring-2 focus:ring-accent focus:border-transparent text-foreground placeholder:text-muted-foreground/70 transition-shadow"
+                      />
+                    </div>
+                    <div className="flex gap-3 pt-2">
+                      <button
+                        type="submit"
+                        data-testid="user-form-submit"
+                        className="flex-1 bg-accent text-accent-foreground py-2 px-4 rounded-lg hover:brightness-110 active:brightness-95 transition-all font-medium shadow-glow cursor-pointer"
+                      >
+                        {editingUser ? 'Update' : 'Create'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setShowModal(false)}
+                        className="flex-1 bg-muted text-foreground py-2 px-4 rounded-lg hover:bg-muted/70 transition-colors cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                </Card>
+              </div>
+            )}
       </div>
     </Layout>
   )

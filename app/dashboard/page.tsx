@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import Layout from '@/components/Layout'
+import Card from '@/components/Card'
 import { postsApi, todosApi } from '@/lib/api'
 import { useUsersStore } from '@/store/usersStore'
+import { Users as UsersIcon, Notebook, CheckSquare } from '@phosphor-icons/react'
 import {
   BarChart,
   Bar,
@@ -19,6 +21,26 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts'
+
+const CHART_COLORS = {
+  accent: '#22c55e',
+  info: '#60a5fa',
+  warning: '#fbbf24',
+  grid: 'rgb(148 163 184 / 0.15)',
+  axis: '#94a3b8',
+}
+
+const chartTooltipStyle = {
+  contentStyle: {
+    backgroundColor: 'rgb(17 25 43)',
+    border: '1px solid rgb(148 163 184 / 0.2)',
+    borderRadius: '10px',
+    color: '#f1f5f9',
+    fontSize: '13px',
+  },
+  labelStyle: { color: '#f1f5f9' },
+  itemStyle: { color: '#f1f5f9' },
+}
 
 export default function DashboardPage() {
   const { users, loadUsers } = useUsersStore()
@@ -81,60 +103,75 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <Layout>
-            <div className="flex items-center justify-center h-64">
-              <div data-testid="loading-dashboard" className="text-lg text-gray-600 dark:text-gray-400">Loading dashboard...</div>
-            </div>
+        <div className="flex items-center justify-center h-64">
+          <div data-testid="loading-dashboard" className="text-lg text-muted-foreground">Loading dashboard...</div>
+        </div>
       </Layout>
     )
   }
 
+  const stats: Array<{
+    testId: string
+    label: string
+    value: number
+    sub: string
+    icon: typeof UsersIcon
+    countTestId?: string
+  }> = [
+    { testId: 'users-stat-card', label: 'Users', value: users.length, sub: 'Total users', icon: UsersIcon, countTestId: 'users-count' },
+    { testId: 'posts-stat-card', label: 'Posts', value: posts.length, sub: 'Total posts', icon: Notebook },
+    { testId: 'todos-stat-card', label: 'Todos', value: todos.length, sub: 'Total todos', icon: CheckSquare },
+  ]
+
   return (
     <Layout>
       <div>
-            <h1 data-testid="dashboard-title" className="text-3xl font-bold text-gray-800 dark:text-white mb-6">Dashboard</h1>
+        <h1 data-testid="dashboard-title" className="text-2xl font-semibold text-foreground mb-6">Dashboard</h1>
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div data-testid="users-stat-card" className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-colors">
-                <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Users</h2>
-                <p data-testid="users-count" className="text-3xl font-bold text-blue-600 dark:text-blue-400">{users.length}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Total users</p>
-              </div>
-              <div data-testid="posts-stat-card" className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-colors">
-                <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Posts</h2>
-                <p className="text-3xl font-bold text-green-600 dark:text-green-400">{posts.length}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Total posts</p>
-              </div>
-              <div data-testid="todos-stat-card" className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-colors">
-                <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Todos</h2>
-                <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">{todos.length}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Total todos</p>
-              </div>
-            </div>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+          {stats.map((stat) => {
+            const Icon = stat.icon
+            return (
+              <Card key={stat.testId} data-testid={stat.testId} className="p-6">
+                <div className="flex items-start justify-between">
+                  <h2 className="text-sm font-medium text-muted-foreground">{stat.label}</h2>
+                  <div className="h-9 w-9 rounded-lg bg-accent/10 flex items-center justify-center">
+                    <Icon size={18} className="text-accent" />
+                  </div>
+                </div>
+                <p
+                  data-testid={stat.countTestId}
+                  className="text-3xl font-semibold text-foreground tabular mt-3"
+                >
+                  {stat.value}
+                </p>
+                <p className="text-sm text-muted-foreground mt-1">{stat.sub}</p>
+              </Card>
+            )
+          })}
+        </div>
 
         {/* Charts Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-              {/* Posts per User Bar Chart */}
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-colors">
-                <h2 data-testid="posts-per-user-chart" className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Posts per User</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+          {/* Posts per User Bar Chart */}
+          <Card className="p-6">
+            <h2 data-testid="posts-per-user-chart" className="text-base font-semibold text-foreground mb-4">Posts per User</h2>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={postsPerUser}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', color: '#111827' }}
-                  labelStyle={{ color: '#111827' }}
-                />
+                <CartesianGrid strokeDasharray="3 3" stroke={CHART_COLORS.grid} />
+                <XAxis dataKey="name" stroke={CHART_COLORS.axis} fontSize={12} />
+                <YAxis stroke={CHART_COLORS.axis} fontSize={12} />
+                <Tooltip {...chartTooltipStyle} />
                 <Legend />
-                <Bar dataKey="posts" fill="#3b82f6" />
+                <Bar dataKey="posts" fill={CHART_COLORS.info} radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
-          </div>
+          </Card>
 
-              {/* Todos Completion Pie Chart */}
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-colors">
-                <h2 data-testid="todos-completion-chart" className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Todos Completion Status</h2>
+          {/* Todos Completion Pie Chart */}
+          <Card className="p-6">
+            <h2 data-testid="todos-completion-chart" className="text-base font-semibold text-foreground mb-4">Todos Completion Status</h2>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -144,52 +181,48 @@ export default function DashboardPage() {
                   labelLine={false}
                   label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                   outerRadius={80}
-                  fill="#8884d8"
                   dataKey="value"
                 >
                   {todosData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={index === 0 ? '#10b981' : '#f59e0b'} />
+                    <Cell key={`cell-${index}`} fill={index === 0 ? CHART_COLORS.accent : CHART_COLORS.warning} />
                   ))}
                 </Pie>
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', color: '#111827' }}
-                  labelStyle={{ color: '#111827' }}
-                />
+                <Tooltip {...chartTooltipStyle} />
               </PieChart>
             </ResponsiveContainer>
-          </div>
+          </Card>
         </div>
 
-            {/* Todos per User Stacked Bar Chart */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow mb-6 transition-colors">
-              <h2 data-testid="todos-status-by-user-chart" className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Todos Status by User (Top 5)</h2>
+        {/* Todos per User Stacked Bar Chart */}
+        <Card className="p-6 mb-5">
+          <h2 data-testid="todos-status-by-user-chart" className="text-base font-semibold text-foreground mb-4">Todos Status by User (Top 5)</h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={todosPerUser}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', color: '#111827' }} />
+              <CartesianGrid strokeDasharray="3 3" stroke={CHART_COLORS.grid} />
+              <XAxis dataKey="name" stroke={CHART_COLORS.axis} fontSize={12} />
+              <YAxis stroke={CHART_COLORS.axis} fontSize={12} />
+              <Tooltip {...chartTooltipStyle} />
               <Legend />
-              <Bar dataKey="completed" stackId="a" fill="#10b981" name="Completed" />
-              <Bar dataKey="pending" stackId="a" fill="#f59e0b" name="Pending" />
+              <Bar dataKey="completed" stackId="a" fill={CHART_COLORS.accent} name="Completed" radius={[0, 0, 0, 0]} />
+              <Bar dataKey="pending" stackId="a" fill={CHART_COLORS.warning} name="Pending" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
-        </div>
+        </Card>
 
-            {/* Posts Distribution Line Chart */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-colors">
-              <h2 data-testid="posts-distribution-chart" className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Posts Distribution by User</h2>
+        {/* Posts Distribution Line Chart */}
+        <Card className="p-6">
+          <h2 data-testid="posts-distribution-chart" className="text-base font-semibold text-foreground mb-4">Posts Distribution by User</h2>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={postsPerUser}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', color: '#111827' }} />
+              <CartesianGrid strokeDasharray="3 3" stroke={CHART_COLORS.grid} />
+              <XAxis dataKey="name" stroke={CHART_COLORS.axis} fontSize={12} />
+              <YAxis stroke={CHART_COLORS.axis} fontSize={12} />
+              <Tooltip {...chartTooltipStyle} />
               <Legend />
-              <Line type="monotone" dataKey="posts" stroke="#3b82f6" strokeWidth={2} />
+              <Line type="monotone" dataKey="posts" stroke={CHART_COLORS.info} strokeWidth={2.5} dot={{ r: 3 }} />
             </LineChart>
           </ResponsiveContainer>
-        </div>
+        </Card>
       </div>
     </Layout>
   )

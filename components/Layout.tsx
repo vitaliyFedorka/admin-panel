@@ -33,7 +33,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex">
       <Sidebar />
-      <main className="flex-1 p-8 bg-gray-50 dark:bg-gray-900 min-h-screen ml-64 transition-colors">
+      <main className="flex-1 p-6 md:p-8 bg-background min-h-screen ml-64 transition-colors">
         {children}
       </main>
     </div>
